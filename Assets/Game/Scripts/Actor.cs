@@ -21,12 +21,16 @@ public class Actor : MonoBehaviour
 
     private void OnInteract()
     {
+        var playerSuspicion = FindObjectOfType<PlayerSuspicion>();
+
         if (Random.value > 0.5f)
         {
+            playerSuspicion.IncreaseSuspicion();
             _animator.SetTrigger("leftInteract");
         }
         else
         {
+            playerSuspicion.ResetSuspicion();
             _animator.SetTrigger("rightInteract");
             _rightDoor?.Open();
         }
