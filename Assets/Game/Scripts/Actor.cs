@@ -8,7 +8,7 @@ public class Actor : MonoBehaviour
     [SerializeField] private Interactable _interactable;
     [SerializeField] private ActorIK _actorIK;
 
-    [SerializeField] private Door _rightDoor;
+    [SerializeField] private bool isCorrect;
 
     private void Start()
     {
@@ -19,16 +19,14 @@ public class Actor : MonoBehaviour
     {
         _animator.SetBool("isInteracting", _interactable.WasRecentlyInteractive());
 
-        var playerSuspicion = FindObjectOfType<PlayerSuspicion>();
-        _actorIK.Weight = playerSuspicion.SuspicionLevel;
-        _actorIK.LookAtPosition = playerSuspicion.transform.position + Vector3.up * 1.8f;
+        UpdateIK();
     }
 
     private void OnInteract()
     {
         var playerSuspicion = FindObjectOfType<PlayerSuspicion>();
 
-        if (Random.value > 0.5f)
+        if (!isCorrect)
         {
             playerSuspicion.IncreaseSuspicion();
             _animator.SetTrigger("leftInteract");
@@ -37,7 +35,16 @@ public class Actor : MonoBehaviour
         {
             playerSuspicion.ResetSuspicion();
             _animator.SetTrigger("rightInteract");
-            _rightDoor?.Open();
+
+            var room = GetComponentInParent<Room>();
+            room?.Complete();
         }
+    }
+
+    private void UpdateIK() // for test
+    {
+        var playerSuspicion = FindObjectOfType<PlayerSuspicion>();
+        _actorIK.Weight = playerSuspicion.SuspicionLevel;
+        _actorIK.LookAtPosition = playerSuspicion.transform.position + Vector3.up * 1.8f;
     }
 }
