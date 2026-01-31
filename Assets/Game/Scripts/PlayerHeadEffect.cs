@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using Cinemachine;
 using UnityEngine;
 
 public class PlayerHeadEffect : MonoBehaviour
 {
-    [SerializeField] private Transform headHolder;
+    [SerializeField] private Transform _ct;
+    [SerializeField] private CinemachineVirtualCamera _camera;
+    [SerializeField] private CharacterController _characterController;
     [SerializeField] private float amplitude = 0.1f;
     [SerializeField] private float frequencyWalk = 1;
     [SerializeField] private float motionTreshold = 0;
@@ -13,28 +13,30 @@ public class PlayerHeadEffect : MonoBehaviour
     private Vector3 defaultHeadPosition;
     private Vector3 headPosition;
 
-    public float Velocity { get; set; }
-
     private void Start()
     {
-        defaultHeadPosition = headHolder.localPosition;
+        var ct = _camera.GetCinemachineComponent<CinemachineTransposer>();
+        defaultHeadPosition = ct.m_FollowOffset;
     }
 
     private void FixedUpdate()
     {
-        if (Velocity > motionTreshold)
+        var velocity = _characterController.velocity.magnitude;
+
+        if (velocity > motionTreshold)
         {
             headPosition.y = defaultHeadPosition.y + Mathf.Sin(Time.time * frequencyWalk) * 
-                amplitude * (1 - Mathf.Abs(headHolder.localRotation.x)) * Velocity;
+                amplitude * (1 - Mathf.Abs(_ct.localRotation.x)) * velocity;
 
             headPosition.x = defaultHeadPosition.x + Mathf.Cos(Time.time * frequencyWalk / 2f) * 
-                (amplitude / 2f) * Velocity;
+                (amplitude / 2f) * velocity;
         }
         else
         {
             headPosition = defaultHeadPosition;
         }
 
-        headHolder.localPosition = Vector3.Lerp(headHolder.localPosition, headPosition, Time.deltaTime * 5f);
+        var ct = _camera.GetCinemachineComponent<CinemachineTransposer>();
+        ct.m_FollowOffset = Vector3.Lerp(ct.m_FollowOffset, headPosition, Time.deltaTime * 5f);
     }
 }

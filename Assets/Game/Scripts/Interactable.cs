@@ -22,7 +22,7 @@ public class Interactable : MonoBehaviour
 
     public bool IsInteractable(Vector3 look)
     {
-        return Vector3.Dot(_face.forward, look.normalized * -1) > _threshold;
+        return Vector3.Dot(_face.forward, look.normalized) < _threshold * -1;
     }
 
     private void OnDrawGizmosSelected()

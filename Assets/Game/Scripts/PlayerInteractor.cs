@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerInteractor : MonoBehaviour
 {
+    [SerializeField] private Transform _hint;
     [SerializeField] private LayerMask _layerMask;
     [SerializeField] private Vector3 _offset = Vector3.up;
     [SerializeField] private float _radius = 2f;
@@ -43,6 +41,8 @@ public class PlayerInteractor : MonoBehaviour
             var c = _currentInteractable.IsInteractable(Look) ? Color.green : Color.red;
             Debug.DrawLine(transform.position + _offset, _currentInteractable.Face.transform.position, c);
         }
+
+        _hint?.gameObject.SetActive(_currentInteractable != null);
     }
 
     public void Interact()
