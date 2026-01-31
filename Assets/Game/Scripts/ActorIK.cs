@@ -5,6 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class ActorIK : MonoBehaviour
 {
+    [SerializeField] private float weight = 1.0f;
+    [SerializeField] private float bodyWeight = 1.0f;
+    [SerializeField] private float headWeight = 1.0f;
+
     public Vector3 LookAtPosition { get; set; }
     public float Weight { get; set; }
 
@@ -17,9 +21,9 @@ public class ActorIK : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        Debug.Log("ActorIK OnAnimatorIK called");
+        //Debug.Log("ActorIK OnAnimatorIK called");
 
-        _animator.SetLookAtWeight(1, 1, 1);
+        _animator.SetLookAtWeight(weight, bodyWeight, headWeight);
         _animator.SetLookAtPosition(LookAtPosition);
     }
 }
