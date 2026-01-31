@@ -6,6 +6,7 @@ public class Actor : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private Interactable _interactable;
+    [SerializeField] private ActorIK _actorIK;
 
     [SerializeField] private Door _rightDoor;
 
@@ -17,6 +18,10 @@ public class Actor : MonoBehaviour
     private void Update()
     {
         _animator.SetBool("isInteracting", _interactable.WasRecentlyInteractive());
+
+        var playerSuspicion = FindObjectOfType<PlayerSuspicion>();
+        _actorIK.Weight = playerSuspicion.SuspicionLevel;
+        _actorIK.LookAtPosition = playerSuspicion.transform.position + Vector3.up * 1.8f;
     }
 
     private void OnInteract()
