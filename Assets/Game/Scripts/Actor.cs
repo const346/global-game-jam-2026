@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Actor : MonoBehaviour
@@ -7,7 +5,6 @@ public class Actor : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private Interactable _interactable;
     [SerializeField] private ActorIK _actorIK;
-
     [SerializeField] private bool isCorrect;
 
     private void Start()
@@ -47,4 +44,54 @@ public class Actor : MonoBehaviour
         _actorIK.Weight = playerSuspicion.SuspicionLevel;
         _actorIK.LookAtPosition = playerSuspicion.transform.position + Vector3.up * 1.8f;
     }
+
+    public void ApplyCustomize(ActorMask actorMask)
+    {
+
+    }
+
+    public void SetCorrect(bool correct)
+    {
+        isCorrect = correct;
+    }
 }
+
+public struct ActorMask
+{
+    public string Type;
+    public string Color;
+    public string Horn;
+    public bool HasGold;
+    public bool HasPattern;
+}
+
+//public struct ActorMask
+//{
+//    public MaskType Type;
+//    public ColorMaskType Color;
+//    public HornType Horn;
+//    public bool HasGold;
+//    public bool HasPattern;
+//}
+
+//public enum HornType
+//{
+//    None,
+//    Deer,
+//    Goat,
+//    Ram
+//}
+
+//public enum MaskType
+//{
+//    MaskA,
+//    MaskB,
+//    MaskC
+//}
+
+//public enum ColorMaskType
+//{
+//    White,
+//    Red,
+//    Black
+//}
