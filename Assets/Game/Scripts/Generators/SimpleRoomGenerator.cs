@@ -8,7 +8,9 @@ public class SimpleRoomGenerator : MonoBehaviour
 {
     [SerializeField] private Actor _actorTemplate;
     [SerializeField] private Transform _actorSpawnsContainer;
-    
+    [SerializeField] private string _preferedCategory;
+    [SerializeField] private string _excludeСategory;
+
     private Room _room;
 
     private void Awake()
@@ -28,9 +30,14 @@ public class SimpleRoomGenerator : MonoBehaviour
             { "Type", new[] { "TypeA", "TypeB", "TypeC" } },
         };
 
-        var categories = table.Keys.ToArray();
+        var categories = table.Keys.Where(x => x != _excludeСategory).ToArray();
         var categoryIndex = UnityEngine.Random.Range(0, categories.Length);
         var category = categories[categoryIndex];
+
+        if (!string.IsNullOrEmpty(_preferedCategory))
+        {
+            category = _preferedCategory;
+        }
 
         table["Horn"] = table["Horn"].OrderBy(_ => UnityEngine.Random.value).ToArray();
         table["Color"] = table["Color"].OrderBy(_ => UnityEngine.Random.value).ToArray();
