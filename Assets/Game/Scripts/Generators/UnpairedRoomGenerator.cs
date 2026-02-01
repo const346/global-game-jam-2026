@@ -7,6 +7,7 @@ public class UnpairedRoomGenerator : MonoBehaviour
 {
     [SerializeField] private Actor _actorTemplate;
     [SerializeField] private Transform _actorSpawnsContainer;
+    [SerializeField] private int fk = 3;
 
     private Room _room;
 
@@ -53,7 +54,7 @@ public class UnpairedRoomGenerator : MonoBehaviour
         table["Type"] = table["Type"].OrderBy(_ => UnityEngine.Random.value).ToArray();
 
         var masks = new List<ActorMask>();
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < fk; i++)
         {
             var mask1 = new ActorMask
             {
