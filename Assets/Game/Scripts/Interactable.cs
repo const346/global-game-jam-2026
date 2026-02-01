@@ -12,6 +12,8 @@ public class Interactable : MonoBehaviour
 
     public UnityEvent OnInteracted;
     public Transform Face => _face;
+    public bool IsDeactivated {  get; set; }
+
 
     private int frameIndex = -1000;
 
@@ -22,7 +24,7 @@ public class Interactable : MonoBehaviour
 
     public bool IsInteractable(Vector3 look)
     {
-        return Vector3.Dot(_face.forward, look.normalized) < _threshold * -1;
+        return !IsDeactivated && Vector3.Dot(_face.forward, look.normalized) < _threshold * -1;
     }
 
     private void OnDrawGizmosSelected()

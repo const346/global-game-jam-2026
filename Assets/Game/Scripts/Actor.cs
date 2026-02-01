@@ -7,6 +7,11 @@ public class Actor : MonoBehaviour
     [SerializeField] private ActorIK _actorIK;
     [SerializeField] private bool isCorrect;
 
+    public void DeactivateInteraction()
+    {
+        _interactable.IsDeactivated = true;
+    }
+
     private void Start()
     {
         _interactable.OnInteracted.AddListener(OnInteract);
@@ -22,6 +27,9 @@ public class Actor : MonoBehaviour
     private void OnInteract()
     {
         var playerSuspicion = FindObjectOfType<PlayerSuspicion>();
+
+
+        _actorIK.Trigger();
 
         if (!isCorrect)
         {

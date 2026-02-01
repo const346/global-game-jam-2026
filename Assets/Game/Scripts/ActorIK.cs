@@ -14,16 +14,28 @@ public class ActorIK : MonoBehaviour
 
     private Animator _animator;
 
+    private float _triggerTime;
+    private float _scaleHeadWeight;
+
+    public void Trigger()
+    {
+        _triggerTime = Time.time;
+    }
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
     }
 
+    private void Update()
+    {
+        var w = Mathf.InverseLerp(0, 2, Time.time - _triggerTime);
+        _scaleHeadWeight = Mathf.MoveTowards(_scaleHeadWeight, w, 4 * Time.deltaTime);
+    }
+
     private void OnAnimatorIK(int layerIndex)
     {
-        //Debug.Log("ActorIK OnAnimatorIK called");
-
-        _animator.SetLookAtWeight(weight, bodyWeight, headWeight);
+        _animator.SetLookAtWeight(weight, bodyWeight, headWeight * _scaleHeadWeight);
         _animator.SetLookAtPosition(LookAtPosition);
     }
 }
