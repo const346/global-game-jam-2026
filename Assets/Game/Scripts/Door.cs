@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider))]
 public class Door : MonoBehaviour
@@ -8,7 +9,10 @@ public class Door : MonoBehaviour
     [SerializeField] private Renderer _renderer;
 
     private Collider _collider;
-    
+
+    public UnityEvent OnAutoClosed;
+    public bool IsOpen => _collider.isTrigger;
+
     private void Awake()
     {
         _collider = GetComponent<Collider>();
@@ -22,6 +26,7 @@ public class Door : MonoBehaviour
         if (localP.z > 0)
         {
             Close();
+            OnAutoClosed?.Invoke();
         }
     }
 

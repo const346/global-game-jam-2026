@@ -27,8 +27,6 @@ public class Actor : MonoBehaviour
 
     private Renderer _renderer;
     private MaterialPropertyBlock _mpb;
-    
-    private bool isCorrect;
 
     public void DeactivateInteraction()
     {
@@ -47,33 +45,22 @@ public class Actor : MonoBehaviour
         UpdateIK();
     }
 
+    private void UpdateIK()
+    {
+        var player = FindObjectOfType<PlayerMovement>();
+        //_actorIK.Weight = playerSuspicion.SuspicionLevel;
+        _actorIK.LookAtPosition = player.transform.position + Vector3.up * 1.8f;
+    }
+
     private void OnInteract()
     {
-        var playerSuspicion = FindObjectOfType<PlayerSuspicion>();
-
+        var room = GetComponentInParent<Room>();
+        room?.OnInteract(this);
 
         _actorIK.Trigger();
 
-        if (!isCorrect)
-        {
-            playerSuspicion.IncreaseSuspicion();
-            _animator.SetTrigger("leftInteract");
-        }
-        else
-        {
-            playerSuspicion.ResetSuspicion();
-            _animator.SetTrigger("rightInteract");
-
-            var room = GetComponentInParent<Room>();
-            room?.Complete();
-        }
-    }
-
-    private void UpdateIK() // for test
-    {
-        var playerSuspicion = FindObjectOfType<PlayerSuspicion>();
-        _actorIK.Weight = playerSuspicion.SuspicionLevel;
-        _actorIK.LookAtPosition = playerSuspicion.transform.position + Vector3.up * 1.8f;
+        var isCorrect = room != null && room.CorrectActor == this;
+        _animator.SetTrigger(isCorrect ? "rightInteract" : "leftInteract");
     }
 
     public void ApplyCustomize(ActorMask actorMask)
@@ -107,11 +94,6 @@ public class Actor : MonoBehaviour
             _mpb.SetColor(ColorId, colors[actorMask.Color]);
             renderer.SetPropertyBlock(_mpb);
         }
-    }
-
-    public void SetCorrect(bool correct)
-    {
-        isCorrect = correct;
     }
 }
 

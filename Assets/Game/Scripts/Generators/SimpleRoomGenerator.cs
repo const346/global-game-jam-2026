@@ -8,11 +8,13 @@ public class SimpleRoomGenerator : MonoBehaviour
 {
     [SerializeField] private Actor _actorTemplate;
     [SerializeField] private Transform _actorSpawnsContainer;
+    
+    private Room _room;
 
     private void Awake()
     {
-        var room = GetComponent<Room>();
-        room.OnGenerate.AddListener(Generate);
+        _room = GetComponent<Room>();
+        _room.OnGenerate.AddListener(Generate);
     }
 
     private void Generate()
@@ -78,7 +80,7 @@ public class SimpleRoomGenerator : MonoBehaviour
 
             if (i == masks.Count - 1)
             {
-                actor.SetCorrect(true);
+                _room.CorrectActor = actor;
             }
 
             Debug.Log($"Actor {i}: Type={masks[i].Type}, Color={masks[i].Color}, Horn={masks[i].Horn}, IsCorrect={i == masks.Count - 1}");
