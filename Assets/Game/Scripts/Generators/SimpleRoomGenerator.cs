@@ -22,7 +22,7 @@ public class SimpleRoomGenerator : MonoBehaviour
         var table = new Dictionary<string, string[]>()
         {
             { "Horn", new[] { "Deer", "Goat", "Ram" } },
-            { "Color", new[] { "White", "Back", "Red" } },
+            { "Color", new[] { "White", "Black", "Red" } },
             { "Type", new[] { "TypeA", "TypeB", "TypeC" } },
         };
 
