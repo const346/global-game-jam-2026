@@ -9,8 +9,8 @@ public class OverseerIK : MonoBehaviour
     [SerializeField] private float bodyWeight = 1.0f;
     [SerializeField] private float headWeight = 1.0f;
 
-    [SerializeField] private Transform lookAtTarget;
-    //public Vector3 LookAtPosition { get; set; }
+    //[SerializeField] private Transform lookAtTarget;
+    public Vector3 LookAtPosition { get; set; }
     public float Weight { get; set; }
 
     private Animator _animator;
@@ -24,6 +24,6 @@ public class OverseerIK : MonoBehaviour
     private void OnAnimatorIK(int layerIndex)
     {
         _animator.SetLookAtWeight(weight, bodyWeight, headWeight * headWeight);
-        _animator.SetLookAtPosition(lookAtTarget.position);
+        _animator.SetLookAtPosition(LookAtPosition);
     }
 }

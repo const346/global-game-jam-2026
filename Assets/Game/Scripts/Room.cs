@@ -122,8 +122,15 @@ public class Room : MonoBehaviour
         var dA = Vector3.Distance(_hunterA.transform.position, _failCamera.transform.position);
         var dB = Vector3.Distance(_hunterB.transform.position, _failCamera.transform.position);
 
-        _failCamera.LookAt = dA < dB ? _hunterB : _hunterA;
+        var hunter = dA < dB ? _hunterB : _hunterA;
+        _failCamera.LookAt = hunter;
         _failCamera.Priority = 20;
+
+        var hunterAnimator = hunter.GetComponentInChildren<Animator>();
+        hunterAnimator.SetTrigger("Shoot");
+
+        var hunterIK = hunterAnimator.GetComponent<OverseerIK>();
+        hunterIK.LookAtPosition = playerInput.transform.position + Vector3.up * 1.8f; 
 
         foreach (var act in GetComponentsInChildren<Actor>())
         {

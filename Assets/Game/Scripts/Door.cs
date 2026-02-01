@@ -8,6 +8,7 @@ public class Door : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private Renderer _renderer;
+    [SerializeField] private Animator _animator;
 
     private Collider _collider;
 
@@ -33,17 +34,21 @@ public class Door : MonoBehaviour
 
     public void Close()
     {
+        _animator.SetBool("Open", false);
+
         _audioSource.Play();
 
         _collider.isTrigger = false;
-        _renderer.enabled = true;
+        //_renderer.enabled = true;
     }
 
     public void Open()
     {
+        _animator.SetBool("Open", true);
+
         _audioSource.Play();
 
         _collider.isTrigger = true;
-        _renderer.enabled = false;
+        //_renderer.enabled = false;
     }
 }
