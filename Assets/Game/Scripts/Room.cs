@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class Room : MonoBehaviour
 {
+    [SerializeField] private GameObject _startUI;
     [SerializeField] private CinemachineVirtualCamera _failCamera;
 
     [SerializeField] private Room _previousRoom;
@@ -106,10 +107,20 @@ public class Room : MonoBehaviour
         _failCamera.LookAt = dA < dB ? _hunterB : _hunterA;
         _failCamera.Priority = 20;
 
+        foreach (var act in GetComponentsInChildren<Actor>())
+        {
+            act.DeactivateInteraction();
+        }
+
         yield return new WaitForSeconds(3f);
 
-        playerInput.enabled = true;
+        _startUI.SetActive(true);
+        
+        yield return new WaitUntil(() => !_startUI.activeSelf);
+
+        // xxxx
         _failCamera.Priority = 5;
+        playerInput.enabled = true;
 
         // Reset room
         SuspicionLevel = 0f;
