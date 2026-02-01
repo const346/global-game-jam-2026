@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class Room : MonoBehaviour
 {
+    [SerializeField] private RoomUI _roomUI;
     [SerializeField] private ProgressUI _progressUI;
     [SerializeField] private GameObject _startUI;
     [SerializeField] private CinemachineVirtualCamera _failCamera;
@@ -102,6 +103,7 @@ public class Room : MonoBehaviour
     private void OnLeaveRoom()
     {
         IsRoomCompleted = true;
+        _roomUI.SetCheck(true);
     }
 
     private IEnumerator RoomEnding()
