@@ -13,15 +13,19 @@ public class PlayerInteractor : MonoBehaviour
 
     private void FixedUpdate()
     {
+        var playerPosition = transform.position + _offset;
         var hits = Physics.OverlapSphere(transform.position + _offset, _radius, _layerMask);
 
         var minDistance = float.MaxValue;
         var closestInteractable = default(Interactable);
 
+        var plane = new Plane(Look, playerPosition);
+        
+
         foreach (var hit in hits)
         {
             var interactable = hit.GetComponent<Interactable>();
-            if (interactable != null && interactable.IsInteractable(Look))
+            if (interactable != null && plane.GetSide(interactable.Face.position) && interactable.IsInteractable(Look))
             {
                 float distance = Vector3.Distance(transform.position, hit.transform.position);
                 if (distance < minDistance)
