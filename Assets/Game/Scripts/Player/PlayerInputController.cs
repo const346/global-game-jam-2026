@@ -39,4 +39,10 @@ public class PlayerInputController : MonoBehaviour
             _playerInteractor.Interact();
         }
     }
+
+    public void ResetInput()
+    {
+        _playerMovement.Input = Vector2.zero;
+        _playerInteractor.Look = Vector2.zero;
+    }
 }

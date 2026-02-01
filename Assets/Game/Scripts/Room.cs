@@ -5,8 +5,10 @@ using UnityEngine.Events;
 
 public class Room : MonoBehaviour
 {
+    [SerializeField] private ProgressUI _progressUI;
     [SerializeField] private GameObject _startUI;
     [SerializeField] private CinemachineVirtualCamera _failCamera;
+    [SerializeField] private CinemachineVirtualCamera _virtualCamera;
 
     [SerializeField] private Room _previousRoom;
     [SerializeField] private Door _door;
@@ -38,6 +40,8 @@ public class Room : MonoBehaviour
 
             _door.Open();
             SuspicionLevel = 0f;
+
+            _progressUI.SetProgress(SuspicionLevel);
         }
         else
         {
@@ -54,6 +58,9 @@ public class Room : MonoBehaviour
             player.transform.position = _playerSpawn.position;
             player.transform.rotation = _playerSpawn.rotation;
         }
+
+        var pov = _virtualCamera.GetCinemachineComponent<CinemachinePOV>();
+        pov.m_HorizontalAxis.Value = _playerSpawn.rotation.eulerAngles.y;
     }
 
     private void Start()
@@ -88,6 +95,8 @@ public class Room : MonoBehaviour
             IsRoomEnding = true;
             StartCoroutine(RoomEnding());
         }
+
+        _progressUI.SetProgress(SuspicionLevel);
     }
 
     private void OnLeaveRoom()
@@ -100,6 +109,7 @@ public class Room : MonoBehaviour
         // Disable player control
         var playerInput = FindObjectOfType<PlayerInputController>();
         playerInput.enabled = false;
+        playerInput.ResetInput();
 
         var dA = Vector3.Distance(_hunterA.transform.position, _failCamera.transform.position);
         var dB = Vector3.Distance(_hunterB.transform.position, _failCamera.transform.position);
