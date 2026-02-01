@@ -69,10 +69,28 @@ public class Room : MonoBehaviour
         pov.m_HorizontalAxis.Value = _playerSpawn.rotation.eulerAngles.y;
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
         OnGenerate?.Invoke();
         _door.OnAutoClosed.AddListener(OnLeaveRoom);
+
+        if (_previousRoom == null)
+        {
+            _startUI.gameObject.SetActive(true);
+
+            var playerInput = FindObjectOfType<PlayerInputController>();
+            playerInput.enabled = false;
+            playerInput.ResetInput();
+
+            IsRoomEnding = true;
+
+            yield return new WaitUntil(() => !_startUI.activeSelf);
+
+            IsRoomEnding = false;
+
+            playerInput.enabled = true;
+            SpawnPlayer();
+        }
     }
 
     private void Update()
