@@ -26,4 +26,13 @@ public class OverseerIK : MonoBehaviour
         _animator.SetLookAtWeight(weight, bodyWeight, headWeight * headWeight);
         _animator.SetLookAtPosition(LookAtPosition);
     }
+
+
+    private void Update()
+    {
+        var player = FindFirstObjectByType<PlayerInputController>();
+        var position = player.transform.position + Vector3.up * 1.8f;
+
+        LookAtPosition = position;
+    }
 }

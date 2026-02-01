@@ -129,9 +129,6 @@ public class Room : MonoBehaviour
         var hunterAnimator = hunter.GetComponentInChildren<Animator>();
         hunterAnimator.SetTrigger("Shoot");
 
-        var hunterIK = hunterAnimator.GetComponent<OverseerIK>();
-        hunterIK.LookAtPosition = playerInput.transform.position + Vector3.up * 1.8f; 
-
         foreach (var act in GetComponentsInChildren<Actor>())
         {
             act.DeactivateInteraction();
