@@ -76,6 +76,9 @@ public class Room : MonoBehaviour
 
         if (_previousRoom == null)
         {
+            var pov = _virtualCamera.GetCinemachineComponent<CinemachinePOV>();
+            pov.enabled = false;
+
             _startUI.gameObject.SetActive(true);
 
             var playerInput = FindObjectOfType<PlayerInputController>();
@@ -87,6 +90,8 @@ public class Room : MonoBehaviour
             yield return new WaitUntil(() => !_startUI.activeSelf);
 
             IsRoomEnding = false;
+
+            pov.enabled = true;
 
             playerInput.enabled = true;
             SpawnPlayer();
