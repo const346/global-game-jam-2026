@@ -1,11 +1,18 @@
+using Cinemachine;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Room : MonoBehaviour
 {
+    [SerializeField] private CinemachineVirtualCamera _failCamera;
+
     [SerializeField] private Room _previousRoom;
     [SerializeField] private Door _door;
     [SerializeField] private Transform _playerSpawn;
+
+    [SerializeField] private Transform _hunterA;
+    [SerializeField] private Transform _hunterB;
 
     [Header("Suspicion")]
     [SerializeField] private float SuspicionIncreaseAmount = 0.2f;
@@ -14,8 +21,10 @@ public class Room : MonoBehaviour
 
     public UnityEvent OnGenerate;
 
+    [Header("DEBUG ONLY")]
     public Actor CorrectActor;
-    public bool RoomCompleted;
+    public bool IsRoomCompleted;
+    public bool IsRoomEnding;
 
     public void OnInteract(Actor actor)
     {
@@ -54,13 +63,18 @@ public class Room : MonoBehaviour
 
     private void Update()
     {
-        if (_previousRoom != null && 
-            !_previousRoom.RoomCompleted)
+        if (IsRoomEnding)
         {
             return;
         }
 
-        if (RoomCompleted || _door.IsOpen)
+        if (_previousRoom != null && 
+            !_previousRoom.IsRoomCompleted)
+        {
+            return;
+        }
+
+        if (IsRoomCompleted || _door.IsOpen)
         {
             return;
         }
@@ -70,20 +84,38 @@ public class Room : MonoBehaviour
 
         if (SuspicionLevel >= 1f)
         {
-            OnEndRoom();
+            IsRoomEnding = true;
+            StartCoroutine(RoomEnding());
         }
     }
 
     private void OnLeaveRoom()
     {
-        RoomCompleted = true;
+        IsRoomCompleted = true;
     }
 
-    private void OnEndRoom()
+    private IEnumerator RoomEnding()
     {
+        // Disable player control
+        var playerInput = FindObjectOfType<PlayerInputController>();
+        playerInput.enabled = false;
+
+        var dA = Vector3.Distance(_hunterA.transform.position, _failCamera.transform.position);
+        var dB = Vector3.Distance(_hunterB.transform.position, _failCamera.transform.position);
+
+        _failCamera.LookAt = dA < dB ? _hunterB : _hunterA;
+        _failCamera.Priority = 20;
+
+        yield return new WaitForSeconds(3f);
+
+        playerInput.enabled = true;
+        _failCamera.Priority = 5;
+
+        // Reset room
         SuspicionLevel = 0f;
         OnGenerate?.Invoke();
-
         SpawnPlayer();
+
+        IsRoomEnding = false;
     }
 }
