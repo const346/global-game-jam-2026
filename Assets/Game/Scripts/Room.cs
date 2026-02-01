@@ -20,6 +20,9 @@ public class Room : MonoBehaviour
     [SerializeField] private Transform _hunterA;
     [SerializeField] private Transform _hunterB;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource _audioSource;
+    
     [Header("Suspicion")]
     [SerializeField] private float SuspicionIncreaseAmount = 0.2f;
     [SerializeField] private float SuspicionSpeed = 0.01f;
@@ -110,6 +113,7 @@ public class Room : MonoBehaviour
 
     private IEnumerator RoomEnding()
     {
+
         // Disable player control
         var playerInput = FindObjectOfType<PlayerInputController>();
         playerInput.enabled = false;
@@ -126,9 +130,17 @@ public class Room : MonoBehaviour
             act.DeactivateInteraction();
         }
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
+
+        // audio
+        _audioSource.Play();
+
+        yield return new WaitForSeconds(1f);
 
         _startUI.SetActive(true);
+
+
+  
 
         float t = 0f;
         var color = _fadeUI.color;

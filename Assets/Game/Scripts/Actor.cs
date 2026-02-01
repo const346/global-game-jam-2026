@@ -9,6 +9,11 @@ public class Actor : MonoBehaviour
     [SerializeField] private Interactable _interactable;
     [SerializeField] private ActorIK _actorIK;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _rightClip;
+    [SerializeField] private AudioClip _leftClip;
+
     [Header("Customize")]
     [SerializeField] private Transform _maskA;
     [SerializeField] private Transform _maskB;
@@ -61,6 +66,8 @@ public class Actor : MonoBehaviour
 
         var isCorrect = room != null && room.CorrectActor == this;
         _animator.SetTrigger(isCorrect ? "rightInteract" : "leftInteract");
+
+        _audioSource.PlayOneShot(isCorrect ? _rightClip : _leftClip);
     }
 
     public void ApplyCustomize(ActorMask actorMask)

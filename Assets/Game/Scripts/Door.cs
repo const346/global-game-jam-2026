@@ -6,6 +6,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider))]
 public class Door : MonoBehaviour
 {
+    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private Renderer _renderer;
 
     private Collider _collider;
@@ -32,12 +33,16 @@ public class Door : MonoBehaviour
 
     public void Close()
     {
+        _audioSource.Play();
+
         _collider.isTrigger = false;
         _renderer.enabled = true;
     }
 
     public void Open()
     {
+        _audioSource.Play();
+
         _collider.isTrigger = true;
         _renderer.enabled = false;
     }
