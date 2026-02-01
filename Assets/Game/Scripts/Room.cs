@@ -2,9 +2,11 @@ using Cinemachine;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Room : MonoBehaviour
 {
+    [SerializeField] private Image _fadeUI;
     [SerializeField] private RoomUI _roomUI;
     [SerializeField] private ProgressUI _progressUI;
     [SerializeField] private GameObject _startUI;
@@ -127,7 +129,22 @@ public class Room : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         _startUI.SetActive(true);
-        
+
+        float t = 0f;
+        var color = _fadeUI.color;
+        while (t < 1f)
+        {
+            t += Time.deltaTime;
+            color.a = Mathf.Lerp(1, 0f, t / 1f);
+
+            _fadeUI.color = color;
+
+            yield return null;
+        }
+
+        color.a = 0f;
+        _fadeUI.color = color;
+
         yield return new WaitUntil(() => !_startUI.activeSelf);
 
         // xxxx
