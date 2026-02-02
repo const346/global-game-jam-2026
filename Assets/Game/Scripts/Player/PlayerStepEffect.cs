@@ -58,6 +58,8 @@ public class PlayerStepEffect : MonoBehaviour
         if (_lastStep < 0f && step >= 0f)
         {
             _audioSource.PlayOneShot(_footstepClips[Random.Range(0, _footstepClips.Length)]);
+            _audioSource.pitch = Random.Range(0.9f, 1.1f);
+            _audioSource.volume = Random.Range(0.8f, 1f);
         }
 
         _lastStep = step;
