@@ -8,10 +8,15 @@ public class PlayerInputController : MonoBehaviour
 
     private InputSystem_Actions _actions;
 
-    private void Start()
+    private void OnEnable()
     {
         _actions = new InputSystem_Actions();
-        _actions.Player.Enable();
+        _actions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _actions.Disable();
     }
 
     private void Update()
