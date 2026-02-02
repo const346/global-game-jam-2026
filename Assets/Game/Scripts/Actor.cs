@@ -41,6 +41,7 @@ public class Actor : MonoBehaviour
     private void Start()
     {
         _interactable.OnInteracted.AddListener(OnInteract);
+        _animator.SetFloat("cycleOffset", Random.Range(0f, 1f));
     }
 
     private void Update()

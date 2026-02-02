@@ -133,8 +133,8 @@ MonoBehaviour:
   _goatHorn: {fileID: 4257147770681077433}
   _ramHorn: {fileID: 873147304375831884}
   _colorWhite: {r: 1, g: 1, b: 1, a: 1}
-  _colorBlack: {r: 0, g: 0, b: 0, a: 1}
-  _colorRed: {r: 1, g: 0, b: 0, a: 1}
+  _colorBlack: {r: 0.45314658, g: 0.52945894, b: 0.8050314, a: 1}
+  _colorRed: {r: 0.9308176, g: 0.37174153, b: 0.39244798, a: 1}
   _renderers:
   - {fileID: 1551332559264735292}
   - {fileID: 4469265246483440910}
