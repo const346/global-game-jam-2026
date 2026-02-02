@@ -169,6 +169,8 @@ public class Room : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        hunterAnimator.Play("Idle", 0);
+
         _startUI.SetActive(true);
 
         SpawnPlayer();
