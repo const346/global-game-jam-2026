@@ -83,6 +83,48 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2167903271749277179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1368877690729329157}
+  - component: {fileID: 8987765693947451270}
+  m_Layer: 0
+  m_Name: Occlusion Portal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1368877690729329157
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167903271749277179}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8346244309907971607}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!41 &8987765693947451270
+OcclusionPortal:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167903271749277179}
+  m_Open: 1
+  m_Center: {x: 0, y: 10, z: 0}
+  m_Size: {x: 50, y: 50, z: 0.2}
 --- !u!1 &3129364244194111169
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +161,7 @@ Transform:
   - {fileID: 4018271305132494334}
   - {fileID: 7656907174234240698}
   - {fileID: 7409691941761958842}
+  - {fileID: 1368877690729329157}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &8857180698445726227
@@ -157,6 +200,7 @@ MonoBehaviour:
   _audioSource: {fileID: -3145655727010031435}
   _renderer: {fileID: 2413503509680579796}
   _animator: {fileID: 8449207693547552278}
+  _occlusionPortal: {fileID: 8987765693947451270}
   OnAutoClosed:
     m_PersistentCalls:
       m_Calls: []
