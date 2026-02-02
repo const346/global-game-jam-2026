@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInputController : MonoBehaviour
 {
@@ -6,46 +7,29 @@ public class PlayerInputController : MonoBehaviour
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private PlayerInteractor _playerInteractor;
 
-    private InputSystem_Actions _actions;
+    private Vector2 _inputMove;
 
-    private void OnEnable()
+    public void OnInteract(InputAction.CallbackContext context)
     {
-        _actions = new InputSystem_Actions();
-        _actions.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _actions.Disable();
-    }
-
-    private void Update()
-    {
-        // cursor lock
-        if (_actions.Player.Crouch.WasPressedThisFrame())
-        {
-            if (Cursor.lockState == CursorLockMode.Locked)
-                Cursor.lockState = CursorLockMode.None;
-            else
-                Cursor.lockState = CursorLockMode.Locked;
-        }
-
-        // movement
-        var moveInput = _actions.Player.Move.ReadValue<Vector2>();
-        var cameraYaw = _camera.transform.eulerAngles.y;
-
-        _playerMovement.Input = Quaternion.Euler(0f, 0f, -cameraYaw) * moveInput;
-
-        // interaction
-        _playerInteractor.Look = _camera.transform.forward;
-
-        if (_actions.Player.Interact.WasPressedThisFrame())
+        if (context.performed)
         {
             _playerInteractor.Interact();
         }
     }
 
-    public void ResetInput()
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        _inputMove = context.ReadValue<Vector2>();
+    }
+
+    private void Update() // temporary
+    {
+        var rt = Quaternion.Euler(0f, 0f, -_camera.transform.eulerAngles.y);
+        _playerMovement.Input = rt * _inputMove;
+        _playerInteractor.Look = _camera.transform.forward;
+    }
+
+    public void ResetInput() // temporary
     {
         _playerMovement.Input = Vector2.zero;
         _playerInteractor.Look = Vector2.zero;
