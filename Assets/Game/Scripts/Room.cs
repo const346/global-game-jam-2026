@@ -12,7 +12,7 @@ public class Room : MonoBehaviour
     [SerializeField] private GameObject _startUI;
     [SerializeField] private CinemachineVirtualCamera _failCamera;
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
-
+    
     [SerializeField] private Room _previousRoom;
     [SerializeField] private Door _door;
     [SerializeField] private Transform _playerSpawn;
@@ -34,6 +34,8 @@ public class Room : MonoBehaviour
     public Actor CorrectActor;
     public bool IsRoomCompleted;
     public bool IsRoomEnding;
+
+    private PlayerMovement _playerMovement;
 
     public void OnInteract(Actor actor)
     {
@@ -58,19 +60,23 @@ public class Room : MonoBehaviour
 
     public void SpawnPlayer()
     {
-        var player = FindObjectOfType<PlayerMovement>();
-        if (player != null)
-        {
-            player.transform.position = _playerSpawn.position;
-            player.transform.rotation = _playerSpawn.rotation;
-        }
+        var characterController = _playerMovement.GetComponent<CharacterController>();
+        characterController.enabled = false;
+
+        _playerMovement.transform.position = _playerSpawn.position;
+        _playerMovement.transform.rotation = _playerSpawn.rotation;
+
+        characterController.enabled = true;
 
         var pov = _virtualCamera.GetCinemachineComponent<CinemachinePOV>();
         pov.m_HorizontalAxis.Value = _playerSpawn.rotation.eulerAngles.y;
+        pov.m_VerticalAxis.Value = 0;
     }
 
     private IEnumerator Start()
     {
+        _playerMovement = FindObjectOfType<PlayerMovement>();
+
         OnGenerate?.Invoke();
         _door.OnAutoClosed.AddListener(OnLeaveRoom);
 
@@ -81,7 +87,7 @@ public class Room : MonoBehaviour
 
             _startUI.gameObject.SetActive(true);
 
-            var playerInput = FindObjectOfType<PlayerInputController>();
+            var playerInput = _playerMovement.GetComponent<PlayerInputController>();
             playerInput.enabled = false;
             playerInput.ResetInput();
 
@@ -136,9 +142,8 @@ public class Room : MonoBehaviour
 
     private IEnumerator RoomEnding()
     {
-
         // Disable player control
-        var playerInput = FindObjectOfType<PlayerInputController>();
+        var playerInput = _playerMovement.GetComponent<PlayerInputController>();
         playerInput.enabled = false;
         playerInput.ResetInput();
 
@@ -166,9 +171,27 @@ public class Room : MonoBehaviour
 
         _startUI.SetActive(true);
 
+        SpawnPlayer();
+        _failCamera.Priority = 5;
 
-  
+        var pov = _virtualCamera.GetCinemachineComponent<CinemachinePOV>();
+        pov.enabled = false;
 
+        yield return FadeEffect();
+        yield return new WaitUntil(() => !_startUI.activeSelf);
+        
+        pov.enabled = true;
+
+        // Reset room
+        SuspicionLevel = 0f;
+        OnGenerate?.Invoke();
+        playerInput.enabled = true;
+
+        IsRoomEnding = false;
+    }
+
+    private IEnumerator FadeEffect()
+    {
         float t = 0f;
         var color = _fadeUI.color;
         while (t < 1f)
@@ -183,18 +206,5 @@ public class Room : MonoBehaviour
 
         color.a = 0f;
         _fadeUI.color = color;
-
-        yield return new WaitUntil(() => !_startUI.activeSelf);
-
-        // xxxx
-        _failCamera.Priority = 5;
-        playerInput.enabled = true;
-
-        // Reset room
-        SuspicionLevel = 0f;
-        OnGenerate?.Invoke();
-        SpawnPlayer();
-
-        IsRoomEnding = false;
     }
 }
