@@ -15,6 +15,7 @@ public class Final : MonoBehaviour
     {
         _door.OnAutoClosed.AddListener(() =>
         {
+            Cursor.lockState = CursorLockMode.None;
             _finalUI.SetActive(true);
             StartCoroutine(ShowFinal());
         });
